@@ -1,15 +1,24 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 
+template = ChatPromptTemplate([
+    ('system', 'You are a helpful AI assistant. Your name is {name}.'),
+    ('human', 'Hello, how are you?'),
+    ('ai', 'I am doing well, thank you. How can I help you today?'),
+    ('human', '{user_input}')
+])
 
-template = """Question: {question}
-
-Answer: Let's think step by step."""
-
-prompt = ChatPromptTemplate.from_template(template)
+prompt_value = ChatPromptTemplate.from_template(template)
 
 model = OllamaLLM(model="llama3.2")
 
-chain = prompt | model
+chain = prompt_value | model
 
-chain.invoke({"question": "What is the meaning of life?"})
+response = template.invoke(
+    {
+        'name': 'Juju',
+        'user_input': 'What is your name?'
+    }
+)
+
+print(response)
